@@ -1,213 +1,78 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0f1115">
-  <title>Dudeyue Ship</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Dudeyue Chi Tiêu</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
+  <div class="app-shell">
+    <header class="hero">
       <div>
-        <p class="eyebrow">DUDEYUE</p>
-        <h1 id="pageTitle">Hôm nay</h1>
-        <p id="todayLabel" class="muted"></p>
+        <p class="eyebrow">QUẢN LÝ TIỀN CÁ NHÂN</p>
+        <h1>Dudeyue Chi Tiêu</h1>
+        <p class="sub">Theo dõi thu nhập ship, xăng xe, dầu máy và các khoản cố định.</p>
       </div>
-      <button id="themeBtn" class="icon-btn" type="button" aria-label="Đổi giao diện"></button>
+      <button id="themeBtn" class="icon-btn" aria-label="Đổi giao diện">☀️</button>
     </header>
 
     <main>
-      <section id="statsPage" class="page" data-page="stats" hidden>
-        <section class="card chart-card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">BIỂU ĐỒ</p>
-              <h2>Theo dõi thu nhập</h2>
-            </div>
-            <strong id="chartTotal" class="chart-total">0 ₫</strong>
-          </div>
-
-          <div class="segmented" id="metricTabs">
-            <button class="segment active" data-metric="revenue" type="button">Doanh thu</button>
-            <button class="segment" data-metric="profit" type="button">Lợi nhuận</button>
-            <button class="segment" data-metric="orders" type="button">Số đơn</button>
-          </div>
-
-          <div class="chart-wrap">
-            <svg id="barChart" viewBox="0 0 360 230" role="img" aria-label="Biểu đồ doanh thu"></svg>
-          </div>
-
-          <div class="segmented compact" id="periodTabs">
-            <button class="segment active" data-period="7d" type="button">7 ngày</button>
-            <button class="segment" data-period="4w" type="button">4 tuần</button>
-            <button class="segment" data-period="6m" type="button">6 tháng</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">TỔNG QUAN</p>
-              <h2 id="statsRangeTitle">7 ngày gần nhất</h2>
-            </div>
-          </div>
-
-          <div class="stats-list">
-            <div><span>Doanh thu</span><strong id="statsRevenue">0 ₫</strong></div>
-            <div><span>Tiền xăng</span><strong id="statsFuel">0 ₫</strong></div>
-            <div><span>Lợi nhuận</span><strong id="statsProfit">0 ₫</strong></div>
-            <div><span>Số đơn</span><strong id="statsOrders">0</strong></div>
-            <div><span>Trung bình/đơn</span><strong id="statsAverageOrder">0 ₫</strong></div>
-            <div><span>Trung bình/ngày làm</span><strong id="statsAverageDay">0 ₫</strong></div>
-            <div><span>Ngày tốt nhất</span><strong id="statsBestDay">—</strong></div>
-          </div>
-        </section>
+      <section class="summary-grid">
+        <article class="summary-card income"><span>Thu nhập tháng</span><strong id="monthIncome">0đ</strong></article>
+        <article class="summary-card expense"><span>Tổng chi tháng</span><strong id="monthExpense">0đ</strong></article>
+        <article class="summary-card profit"><span>Còn lại tháng</span><strong id="monthNet">0đ</strong></article>
+        <article class="summary-card"><span>Dự kiến cuối tháng</span><strong id="monthForecast">0đ</strong></article>
       </section>
 
-      <section id="homePage" class="page active" data-page="home">
-        <section class="summary-grid">
-          <article class="summary-card featured">
-            <span>Lợi nhuận hôm nay</span>
-            <strong id="todayProfit">0 ₫</strong>
-          </article>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">NHẬP HÔM NAY</p><h2>Thu nhập và chi phí</h2></div>
+          <span id="todayLabel" class="date-pill"></span>
+        </div>
 
-          <article class="summary-card">
-            <span>Doanh thu</span>
-            <strong id="todayRevenue">0 ₫</strong>
-          </article>
-
-          <article class="summary-card">
-            <span>Số đơn</span>
-            <strong id="todayOrders">0</strong>
-          </article>
-
-          <article class="summary-card">
-            <span>Trung bình/đơn</span>
-            <strong id="todayAverage">0 ₫</strong>
-          </article>
-
-          <article class="summary-card fuel-summary">
-            <div class="summary-card-head">
-              <span>Tiền xăng</span>
-              <button id="quickFuelBtn" class="mini-edit-btn" type="button" aria-label="Sửa tiền xăng"></button>
-            </div>
-            <strong id="todayFuel">0 ₫</strong>
-          </article>
-        </section>
-
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">THÊM ĐƠN</p>
-              <h2>Nhập giá ship</h2>
-            </div>
-            <span id="liveClock" class="clock"></span>
-          </div>
-
-          <form id="orderForm">
-            <label class="field">
-              <span>Giá ship</span>
-              <div class="money-input">
-                <input id="amountInput" type="text" inputmode="numeric"
-                       placeholder="Ví dụ: 35.000" autocomplete="off" required>
-                <b>₫</b>
-              </div>
-            </label>
-            <p class="hint">Ngày và giờ được lấy tự động khi lưu, không thể chỉnh sửa.</p>
-            <button class="primary-btn" type="submit">Lưu đơn</button>
-          </form>
-        </section>
-
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">CHI PHÍ NGÀY</p>
-              <h2>Tiền xăng hôm nay</h2>
-            </div>
-          </div>
-
-          <form id="fuelForm">
-            <label class="field">
-              <span>Tiền xăng</span>
-              <div class="money-input">
-                <input id="fuelInput" type="text" inputmode="numeric" placeholder="50.000">
-                <b>₫</b>
-              </div>
-            </label>
-            <button class="secondary-btn" type="submit">Lưu tiền xăng</button>
-          </form>
-        </section>
-
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">GẦN ĐÂY</p>
-              <h2>5 đơn mới nhất</h2>
-            </div>
-          </div>
-          <div id="recentOrderList" class="order-list"></div>
-          <p id="recentEmptyState" class="empty-state">Chưa có đơn nào.</p>
-        </section>
+        <form id="dailyForm" class="form-grid">
+          <label>Ngày<input id="entryDate" type="date" required /></label>
+          <label>Thu nhập hôm nay<div class="money-input"><input id="income" type="number" inputmode="numeric" min="0" step="1000" placeholder="350000" required /><span>đ</span></div></label>
+          <label>Tiền xăng hôm nay<div class="money-input"><input id="fuel" type="number" inputmode="numeric" min="0" max="200000" step="1000" value="50000" /><span>đ</span></div></label>
+          <label>Số km hôm nay<div class="money-input"><input id="km" type="number" inputmode="decimal" min="0" step="1" placeholder="80" /><span>km</span></div></label>
+          <label>Ăn uống / sinh hoạt<div class="money-input"><input id="food" type="number" inputmode="numeric" min="0" step="1000" value="0" /><span>đ</span></div></label>
+          <label>Thuốc lá<div class="money-input"><input id="cigarette" type="number" inputmode="numeric" min="0" step="1000" value="0" /><span>đ</span></div></label>
+          <label class="full">Chi khác<div class="money-input"><input id="other" type="number" inputmode="numeric" min="0" step="1000" value="0" /><span>đ</span></div></label>
+          <label class="full">Ghi chú<input id="note" type="text" maxlength="100" placeholder="Ví dụ: sửa xe, mua đồ..." /></label>
+          <button class="primary-btn full" type="submit">Lưu hôm nay</button>
+        </form>
+        <div class="instant-result"><span>Còn lại sau chi phí hôm nay</span><strong id="todayNet">0đ</strong></div>
       </section>
 
-      <section id="historyPage" class="page" data-page="history" hidden>
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">LỊCH SỬ</p>
-              <h2>Tất cả đơn</h2>
-            </div>
-            <button id="clearAllBtn" class="text-btn danger" type="button">Xóa hết</button>
-          </div>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">CHI CỐ ĐỊNH</p><h2>Thiết lập mỗi tháng</h2></div>
+          <button id="saveSettingsBtn" class="secondary-btn" type="button">Lưu thiết lập</button>
+        </div>
+        <div class="settings-grid">
+          <label>Phí nhóm ship<div class="money-input"><input id="groupFee" type="number" min="0" step="1000" value="450000" /><span>đ/tháng</span></div></label>
+          <label>Data<div class="money-input"><input id="dataFee" type="number" min="0" step="1000" value="70000" /><span>đ/tháng</span></div></label>
+          <label>Tiền điện thoại<div class="money-input"><input id="phoneFee" type="number" min="0" step="1000" value="100000" /><span>đ/tháng</span></div></label>
+          <label>Trả nợ<div class="money-input"><input id="debtFee" type="number" min="0" step="1000" value="1900000" /><span>đ/tháng</span></div></label>
+          <label>Thay dầu mỗi<div class="money-input"><input id="oilKm" type="number" min="1" step="100" value="1500" /><span>km</span></div></label>
+          <label>Giá thay dầu<div class="money-input"><input id="oilCost" type="number" min="0" step="1000" value="100000" /><span>đ</span></div></label>
+        </div>
+        <div class="fixed-cost"><span>Chi cố định tháng</span><strong id="fixedTotal">0đ</strong></div>
+      </section>
 
-          <div id="historyGroups" class="history-groups"></div>
-          <p id="historyEmptyState" class="empty-state">Chưa có dữ liệu.</p>
-        </section>
-
-        <section class="card">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">DỮ LIỆU</p>
-              <h2>Sao lưu và khôi phục</h2>
-            </div>
-          </div>
-
-          <div class="backup-actions">
-            <button id="exportBtn" class="secondary-btn" type="button">Xuất sao lưu</button>
-            <label class="secondary-btn file-btn">
-              Nhập sao lưu
-              <input id="importInput" type="file" accept="application/json,.json">
-            </label>
-          </div>
-          <p class="hint">Dữ liệu được lưu trên trình duyệt của điện thoại. Nên xuất sao lưu định kỳ.</p>
-        </section>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">LỊCH SỬ</p><h2>Các ngày đã nhập</h2></div>
+          <button id="clearBtn" class="danger-btn" type="button">Xóa tất cả</button>
+        </div>
+        <div id="emptyState" class="empty-state">Chưa có dữ liệu. Hãy nhập ngày đầu tiên.</div>
+        <div id="historyList" class="history-list"></div>
       </section>
     </main>
-
-    <nav class="bottom-nav" aria-label="Điều hướng chính">
-      <button class="nav-item" data-target="stats" type="button">
-        <span class="nav-icon" data-icon="chart"></span>
-        <span>Thống kê</span>
-      </button>
-
-      <button class="nav-item home-nav active" data-target="home" type="button">
-        <span class="home-icon-wrap">
-          <span class="nav-icon" data-icon="home"></span>
-        </span>
-        <span>Hôm nay</span>
-      </button>
-
-      <button class="nav-item" data-target="history" type="button">
-        <span class="nav-icon" data-icon="receipt"></span>
-        <span>Lịch sử</span>
-      </button>
-    </nav>
-
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>
