@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AI Finance">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>AI Finance</title>
+</head>
+<body>
+<div class="app-shell">
+  <header class="hero-header">
+    <div>
+      <div class="greeting" id="greeting">Chào buổi tối 🌙</div>
+      <div class="date-line" id="dateLine"></div>
+    </div>
+    <button class="robot-orb" id="robotOrb" aria-label="Trợ lý AI">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop stop-color="#54E0D8"/>
+            <stop offset="1" stop-color="#6B8CFF"/>
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="29" fill="#152028"/>
+        <rect x="16" y="20" width="32" height="27" rx="11" fill="#EDF5F6"/>
+        <rect x="21" y="25" width="22" height="15" rx="7" fill="#0E1B20"/>
+        <rect x="23" y="29" width="5" height="7" rx="2.5" fill="url(#g)"/>
+        <rect x="36" y="29" width="5" height="7" rx="2.5" fill="url(#g)"/>
+        <path d="M27 39c2 2 8 2 10 0" stroke="#54E0D8" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M32 20v-6" stroke="#54E0D8" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="32" cy="12" r="3" fill="#54E0D8"/>
+      </svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="screen active" data-screen="home">
+      <div class="period-switch">
+        <button data-period="week">Tuần</button>
+        <button class="active" data-period="month">Tháng</button>
+        <button data-period="year">Năm</button>
+      </div>
+
+      <section class="balance-card glass">
+        <div class="balance-label">
+          <span>Tổng số dư</span>
+          <button class="eye-button" id="toggleBalance">◉</button>
+        </div>
+        <div class="balance-value" id="totalBalance">0 đ</div>
+        <div class="balance-stats">
+          <div>
+            <span><i class="dot green"></i> Thu nhập</span>
+            <strong id="incomeValue">0 đ</strong>
+          </div>
+          <div>
+            <span><i class="dot red"></i> Chi tiêu</span>
+            <strong id="expenseValue">0 đ</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="unlock-card glass">
+        <div class="unlock-icon">🔒</div>
+        <div>
+          <strong>2 tiện ích đang chờ thiết lập</strong>
+          <span>Hóa đơn định kỳ và mục tiêu tiết kiệm</span>
+        </div>
+        <button data-screen-link="settings">›</button>
+      </section>
+
+      <section class="ai-banner">
+        <div class="spark">✦</div>
+        <div>
+          <strong>Phân tích AI thông minh</strong>
+          <span id="aiInsight">Thêm giao dịch để nhận phân tích.</span>
+        </div>
+        <button id="openAI">Mở</button>
+      </section>
+
+      <button class="budget-entry glass" data-screen-link="budgets">
+        <span class="budget-icon">◔</span>
+        <span>
+          <strong>Thiết lập ngân sách</strong>
+          <small>Kiểm soát chi tiêu tốt hơn mỗi tháng</small>
+        </span>
+        <span>›</span>
+      </button>
+
+      <section class="chart-card glass">
+        <div class="section-title-row">
+          <h2>Biểu đồ tài chính</h2>
+          <div class="ios-segment">
+            <button class="active" data-chart-mode="flow">Thu/Chi</button>
+            <button data-chart-mode="category">Danh mục</button>
+          </div>
+        </div>
+        <canvas id="chart"></canvas>
+      </section>
+
+      <section class="recent-section">
+        <div class="section-title-row">
+          <h2>Giao dịch gần đây</h2>
+          <button class="text-link" data-screen-link="transactions">Xem tất cả</button>
+        </div>
+        <div class="list-card" id="recentList"></div>
+      </section>
+    </section>
+
+    <section class="screen" data-screen="transactions">
+      <div class="screen-header">
+        <h1>Giao dịch</h1>
+        <button class="round-add" id="addTransaction">＋</button>
+      </div>
+      <div class="search-box">
+        <span>⌕</span>
+        <input id="transactionSearch" placeholder="Tìm theo ghi chú, danh mục...">
+      </div>
+      <div class="filter-row">
+        <button class="active" data-filter="all">Tất cả</button>
+        <button data-filter="income">Thu nhập</button>
+        <button data-filter="expense">Chi tiêu</button>
+        <button data-filter="transfer">Chuyển khoản</button>
+      </div>
+      <div class="list-card" id="transactionList"></div>
+    </section>
+
+    <section class="screen" data-screen="wallets">
+      <div class="screen-header">
+        <h1>Ví & Tài khoản</h1>
+        <button class="round-add" id="addWallet">＋</button>
+      </div>
+      <div class="search-box"><span>⌕</span><input id="walletSearch" placeholder="Tìm kiếm tài khoản..."></div>
+      <section class="wallet-hero">
+        <span>Tổng tài sản</span>
+        <strong id="walletTotal">0 đ</strong>
+        <small id="walletCount">0 tài khoản</small>
+      </section>
+      <div id="walletList"></div>
+    </section>
+
+    <section class="screen" data-screen="budgets">
+      <div class="screen-header">
+        <button class="back-btn" data-screen-link="home">‹</button>
+        <h1>Ngân sách</h1>
+        <button class="round-add" id="addBudget">＋</button>
+      </div>
+      <section class="health-card glass">
+        <span>Sức khỏe ngân sách</span>
+        <div><strong id="budgetScore">100</strong><small> điểm</small></div>
+        <div class="meter"><i id="budgetHealthBar"></i></div>
+      </section>
+      <section class="budget-summary glass">
+        <div><span>Ngân sách</span><strong id="budgetTotal">0 đ</strong></div>
+        <div><span>Đã chi</span><strong id="budgetSpent">0 đ</strong></div>
+        <div><span>Còn lại</span><strong id="budgetLeft">0 đ</strong></div>
+        <div><span>Đã dùng</span><strong id="budgetPercent">0%</strong></div>
+      </section>
+      <div class="quick-picks">
+        <div class="section-title-row">
+          <h2>Chọn nhanh</h2>
+          <span>Chạm để bật/tắt</span>
+        </div>
+        <div class="quick-grid" id="quickGrid"></div>
+      </div>
+      <div id="budgetList"></div>
+    </section>
+
+    <section class="screen" data-screen="settings">
+      <div class="screen-header"><h1>Cài đặt</h1></div>
+      <section class="settings-profile glass">
+        <div class="profile-robot">🤖</div>
+        <div><strong>AI Finance Assistant</strong><span>Quản lý tài chính cá nhân</span></div>
+      </section>
+      <section class="settings-list glass">
+        <button id="exportBtn"><span>⬇</span><div><strong>Sao lưu dữ liệu</strong><small>Xuất file JSON</small></div><i>›</i></button>
+        <label><span>⬆</span><div><strong>Khôi phục dữ liệu</strong><small>Nhập file JSON</small></div><i>›</i><input id="importInput" type="file" accept=".json,application/json"></label>
+        <button id="themeBtn"><span>◐</span><div><strong>Giao diện</strong><small id="themeLabel">Tối</small></div><i>›</i></button>
+        <button class="danger" id="resetBtn"><span>⌫</span><div><strong>Xóa tất cả dữ liệu</strong><small>Không thể hoàn tác</small></div><i>›</i></button>
+      </section>
+      <p class="version">AI Finance 2.0</p>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="active" data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Tổng quan</span></button>
+    <button data-tab="transactions"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 12h14M5 19h14M3 5h.01M3 12h.01M3 19h.01"/></svg><span>Giao dịch</span></button>
+    <button data-tab="wallets"><svg viewBox="0 0 24 24"><path d="M3 7h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7V5a2 2 0 0 1 2-2h12M16 12h5"/></svg><span>Ví</span></button>
+    <button data-tab="budgets"><svg viewBox="0 0 24 24"><path d="M4 19V9m6 10V5m6 14v-7m5 7H2"/></svg><span>Ngân sách</span></button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm8 4 2-1-2-4-2 1-2-2 1-2-4-2-1 2H9L8 2 4 4l1 2-2 2-2-1-1 4 2 1v3l-2 1 2 4 2-1 2 2-1 2 4 2 1-2h3l1 2 4-2-1-2 2-2 2 1 2-4-2-1z"/></svg><span>Cài đặt</span></button>
+  </nav>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<section class="bottom-sheet" id="transactionSheet" aria-hidden="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-top">
+    <button id="closeTransactionSheet">Hủy</button>
+    <h2>Thêm giao dịch</h2>
+    <button class="save-btn" id="saveTransaction">Lưu</button>
+  </div>
+  <div class="type-segment">
+    <button class="active" data-type="income">Thu nhập</button>
+    <button data-type="expense">Chi tiêu</button>
+    <button data-type="transfer">Chuyển khoản</button>
+  </div>
+  <div class="amount-box">
+    <span>₫</span>
+    <input id="amountInput" inputmode="numeric" placeholder="0">
+  </div>
+  <div class="field-title">Danh mục</div>
+  <div class="category-grid" id="categoryGrid"></div>
+  <div class="sheet-field">
+    <span>Tài khoản</span>
+    <select id="walletSelect"></select>
+  </div>
+  <div class="sheet-field" id="toWalletField" hidden>
+    <span>Chuyển đến</span>
+    <select id="toWalletSelect"></select>
+  </div>
+  <div class="sheet-field">
+    <span>Ngày</span>
+    <input id="dateInput" type="date">
+  </div>
+  <div class="sheet-field">
+    <span>Ghi chú</span>
+    <input id="noteInput" placeholder="Tùy chọn">
+  </div>
+</section>
+
+<section class="bottom-sheet small-sheet" id="walletSheet" aria-hidden="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-top"><button data-close-sheet>Hủy</button><h2>Thêm tài khoản</h2><button class="save-btn" id="saveWallet">Lưu</button></div>
+  <div class="sheet-field"><span>Tên</span><input id="walletName" placeholder="Ví dụ: MB Bank"></div>
+  <div class="sheet-field"><span>Loại</span><select id="walletKind"><option>Ngân hàng</option><option>Tiền mặt</option><option>Ví điện tử</option></select></div>
+  <div class="sheet-field"><span>Số dư đầu</span><input id="walletInitial" inputmode="numeric" placeholder="0"></div>
+</section>
+
+<section class="bottom-sheet small-sheet" id="budgetSheet" aria-hidden="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-top"><button data-close-sheet>Hủy</button><h2>Thêm ngân sách</h2><button class="save-btn" id="saveBudget">Lưu</button></div>
+  <div class="sheet-field"><span>Danh mục</span><select id="budgetCategory"></select></div>
+  <div class="sheet-field"><span>Giới hạn tháng</span><input id="budgetLimit" inputmode="numeric" placeholder="0"></div>
+</section>
+
+<div class="ai-panel" id="aiPanel">
+  <button id="closeAI">×</button>
+  <div class="ai-big-robot">🤖</div>
+  <h2>AI Finance</h2>
+  <p id="aiPanelText"></p>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
