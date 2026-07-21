@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#050607" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AI Finance" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+  <title>AI Finance</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" id="todayLabel"></p>
+        <h1 id="pageTitle">Tổng quan</h1>
+      </div>
+      <button class="robot-btn" id="robotBtn" aria-label="Trợ lý AI">
+        <span class="robot-face">🤖</span>
+      </button>
+    </header>
+
+    <main id="content">
+      <section class="page active" data-page="home">
+        <div class="period-tabs">
+          <button data-period="week">Tuần</button>
+          <button class="active" data-period="month">Tháng</button>
+          <button data-period="year">Năm</button>
+        </div>
+
+        <section class="balance-card">
+          <div class="balance-head">
+            <span>Tổng số dư</span>
+            <button id="toggleBalance" class="ghost-icon">◉</button>
+          </div>
+          <strong id="totalBalance">0 đ</strong>
+          <div class="balance-grid">
+            <div><span>↓ Thu nhập</span><b id="periodIncome">0 đ</b></div>
+            <div><span>↑ Chi tiêu</span><b id="periodExpense">0 đ</b></div>
+          </div>
+        </section>
+
+        <button class="feature-card" data-nav="budgets">
+          <div class="feature-icon orange">◔</div>
+          <div><b>Thiết lập ngân sách</b><span>Kiểm soát chi tiêu theo từng danh mục</span></div>
+          <span>›</span>
+        </button>
+
+        <section class="ai-card">
+          <div class="ai-title"><span>✨</span><b>Phân tích AI thông minh</b></div>
+          <p id="aiInsight">Thêm giao dịch để robot AI phân tích thu chi cho bạn.</p>
+          <button id="refreshInsight">Phân tích lại</button>
+        </section>
+
+        <section class="chart-card">
+          <div class="section-head">
+            <h2>Biểu đồ tài chính</h2>
+            <div class="segmented">
+              <button class="active" data-chart="cashflow">Thu/Chi</button>
+              <button data-chart="category">Danh mục</button>
+            </div>
+          </div>
+          <canvas id="financeChart" width="700" height="360"></canvas>
+        </section>
+
+        <section>
+          <div class="section-head">
+            <h2>Giao dịch gần đây</h2>
+            <button class="link-btn" data-nav="transactions">Xem tất cả</button>
+          </div>
+          <div id="recentTransactions" class="transaction-list"></div>
+        </section>
+      </section>
+
+      <section class="page" data-page="transactions">
+        <div class="search-row">
+          <input id="transactionSearch" placeholder="Tìm theo ghi chú, danh mục..." />
+          <button class="circle-btn" id="openTransactionModal">＋</button>
+        </div>
+        <div class="filter-tabs">
+          <button class="active" data-filter="all">Tất cả</button>
+          <button data-filter="income">Thu nhập</button>
+          <button data-filter="expense">Chi tiêu</button>
+          <button data-filter="transfer">Chuyển khoản</button>
+        </div>
+        <div id="allTransactions" class="transaction-list"></div>
+      </section>
+
+      <section class="page" data-page="wallets">
+        <div class="search-row">
+          <input id="walletSearch" placeholder="Tìm kiếm tài khoản..." />
+          <button class="circle-btn" id="openWalletModal">＋</button>
+        </div>
+        <section class="wallet-summary">
+          <span>Tổng tài sản</span>
+          <strong id="walletTotal">0 đ</strong>
+          <small id="walletCount">0 tài khoản</small>
+        </section>
+        <div id="walletList"></div>
+      </section>
+
+      <section class="page" data-page="budgets">
+        <div class="budget-health">
+          <span>Sức khỏe ngân sách</span>
+          <strong><span id="budgetScore">100</span><small> điểm</small></strong>
+          <div class="progress"><i id="scoreBar"></i></div>
+        </div>
+        <div class="budget-summary-grid">
+          <div><span>Ngân sách</span><b id="budgetTotal">0 đ</b></div>
+          <div><span>Đã chi</span><b id="budgetSpent">0 đ</b></div>
+          <div><span>Còn lại</span><b id="budgetRemaining">0 đ</b></div>
+          <div><span>Đã dùng</span><b id="budgetPercent">0%</b></div>
+        </div>
+        <div class="section-head">
+          <h2>Danh mục ngân sách</h2>
+          <button class="circle-btn" id="openBudgetModal">＋</button>
+        </div>
+        <div id="budgetList"></div>
+      </section>
+
+      <section class="page" data-page="settings">
+        <section class="settings-card profile-card">
+          <div class="mini-robot">🤖</div>
+          <div><b>AI Finance Assistant</b><span>Quản lý tài chính cá nhân</span></div>
+        </section>
+        <section class="settings-card">
+          <button id="exportBtn"><span>⬇️</span><div><b>Sao lưu dữ liệu</b><small>Xuất toàn bộ dữ liệu JSON</small></div><i>›</i></button>
+          <label class="settings-upload"><span>⬆️</span><div><b>Khôi phục dữ liệu</b><small>Nhập dữ liệu từ file JSON</small></div><i>›</i><input id="importInput" type="file" accept=".json,application/json"></label>
+          <button id="themeBtn"><span>🌙</span><div><b>Giao diện</b><small id="themeLabel">Tối</small></div><i>›</i></button>
+          <button id="resetBtn" class="danger"><span>🗑️</span><div><b>Xóa tất cả dữ liệu</b><small>Không thể hoàn tác</small></div><i>›</i></button>
+        </section>
+        <p class="version">AI Finance • Phiên bản 1.0.0</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="active" data-nav="home"><span>⌂</span><small>Tổng quan</small></button>
+      <button data-nav="transactions"><span>▤</span><small>Giao dịch</small></button>
+      <button data-nav="wallets"><span>▣</span><small>Ví</small></button>
+      <button data-nav="budgets"><span>◔</span><small>Ngân sách</small></button>
+      <button data-nav="settings"><span>⚙</span><small>Cài đặt</small></button>
+    </nav>
+  </div>
+
+  <dialog id="transactionModal" class="sheet">
+    <form method="dialog" id="transactionForm">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header"><button value="cancel">Hủy</button><h2>Thêm giao dịch</h2><button type="submit" value="default">Lưu</button></div>
+      <div class="type-tabs">
+        <button type="button" class="active" data-type="income">Thu nhập</button>
+        <button type="button" data-type="expense">Chi tiêu</button>
+        <button type="button" data-type="transfer">Chuyển khoản</button>
+      </div>
+      <input type="hidden" name="type" value="income">
+      <label class="amount-input"><span>₫</span><input name="amount" inputmode="numeric" placeholder="0" required></label>
+      <label>Danh mục<select name="category" id="categorySelect"></select></label>
+      <label>Tài khoản<select name="wallet" id="walletSelect"></select></label>
+      <label id="toWalletWrap" hidden>Chuyển đến<select name="toWallet" id="toWalletSelect"></select></label>
+      <label>Ngày<input name="date" type="date" required></label>
+      <label>Ghi chú<input name="note" placeholder="Tùy chọn"></label>
+    </form>
+  </dialog>
+
+  <dialog id="walletModal" class="sheet small-sheet">
+    <form method="dialog" id="walletForm">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header"><button value="cancel">Hủy</button><h2>Thêm tài khoản</h2><button type="submit">Lưu</button></div>
+      <label>Tên tài khoản<input name="name" placeholder="Ví dụ: MB Bank" required></label>
+      <label>Loại<select name="kind"><option>Ngân hàng</option><option>Tiền mặt</option><option>Ví điện tử</option></select></label>
+      <label>Số dư ban đầu<input name="balance" inputmode="numeric" placeholder="0"></label>
+    </form>
+  </dialog>
+
+  <dialog id="budgetModal" class="sheet small-sheet">
+    <form method="dialog" id="budgetForm">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header"><button value="cancel">Hủy</button><h2>Thêm ngân sách</h2><button type="submit">Lưu</button></div>
+      <label>Danh mục<select name="category" id="budgetCategorySelect"></select></label>
+      <label>Giới hạn tháng<input name="limit" inputmode="numeric" placeholder="0" required></label>
+    </form>
+  </dialog>
+
+  <dialog id="aiModal" class="ai-modal">
+    <button class="close-ai" id="closeAi">×</button>
+    <div class="ai-orb">🤖</div>
+    <h2>AI Finance</h2>
+    <p id="aiModalText"></p>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
